@@ -39,6 +39,17 @@ def pure_tone(omega, N):
     @result:
     x (array): N samples from the signal cos(omega*n)
     '''
-    x = 0 # change this line
-    return x
+import numpy as np
 
+def minimum_Fs(f):
+    Fs = 2 * f
+    return Fs
+
+def omega(f, Fs):
+    omega = 2 * np.pi * f / Fs
+    return omega
+
+def pure_tone(omega_val, N):
+    n = np.arange(N)
+    x = np.cos(omega_val * n)
+    return x
