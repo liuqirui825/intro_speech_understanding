@@ -48,9 +48,22 @@ def sine_and_cosine(t_start, t_end, t_steps):
     x (array of length t_steps): cos(t)
     y (array of length t_steps): sin(t)
     '''
-    # change these lines
-    t = 0 
-    x = 0
-    y = 0
-    # end changes here
+import numpy as np
+import matplotlib.pyplot as plt
+
+def center_of_gravity(x):
+    n = len(x)
+    indices = np.arange(n)
+    c = np.dot(indices, x) / np.sum(x)
+    return c
+
+def matched_identity(x):
+    N = len(x)
+    I = np.eye(N)
+    return I
+
+def sine_and_cosine(t_start, t_end, t_steps):
+    t = np.linspace(t_start, t_end, t_steps)
+    x = np.cos(t)
+    y = np.sin(t)
     return t, x, y
