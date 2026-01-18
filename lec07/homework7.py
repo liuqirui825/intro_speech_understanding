@@ -43,4 +43,38 @@ def spectral_analysis(x, Fs):
     f1, f2, f3: The three loudest frequencies (in Hertz)
       These should be sorted so f1 < f2 < f3.
     '''
-    raise RuntimeError("You need to write this part")
+import numpy as np
+
+def major_chord(f, Fs):
+    T = 0.5
+    N = int(Fs * T)
+    n = np.arange(N)
+    
+    root_freq = f
+    third_freq = f * (2 ** (4/12))
+    fifth_freq = f * (2 ** (7/12))
+    
+    omega_root = 2 * np.pi * root_freq / Fs
+    omega_third = 2 * np.pi * third_freq / Fs
+    omega_fifth = 2 * np.pi * fifth_freq / Fs
+    
+    x_root = np.cos(omega_root * n)
+    x_third = np.cos(omega_third * n)
+    x_fifth = np.cos(omega_fifth * n)
+    
+    x = x_root + x_third + x_fifth
+    return x
+
+def dft_matrix(N):
+    n = np.arange(N)
+    k = n.reshape(N, 1)
+    W = np.cos(2 * np.pi * k * n / N) - 1j * np.sin(2 * np.pi * k * n / N)
+    return W
+
+def spectral_analysis(x, Fs):
+    N = len(x)
+    X = np.fft.fft(x)
+    magnitude = np.abs(X[:N//2])
+    indices = np.argsort(magnitude)[-3:]
+    frequencies = indices * Fs / N
+    return tuple(sorted(frequencies))
