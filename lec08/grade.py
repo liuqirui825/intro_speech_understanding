@@ -1,8 +1,17 @@
 import unittest, homework8
 import numpy as np
-import librosa
+np.random.seed(0)
+Fs = 8000
+duration = 1.0  # 1秒
+num_samples = int(Fs * duration)
 
-speech, Fs = librosa.load('train.m4a', sr=8000)
+speech = np.sin(2 * np.pi * 440 * np.arange(num_samples) / Fs) + \
+         0.5 * np.sin(2 * np.pi * 880 * np.arange(num_samples) / Fs) + \
+         0.3 * np.sin(2 * np.pi * 1320 * np.arange(num_samples) / Fs) + \
+         0.1 * np.random.randn(num_samples)
+
+
+speech = speech / np.max(np.abs(speech))
 
 # TestSequence
 class Test(unittest.TestCase):

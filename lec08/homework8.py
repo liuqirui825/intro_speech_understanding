@@ -40,6 +40,26 @@ def mstft_to_spectrogram(mstft):
     The spectrogram should be expressed in decibels (20*log10(mstft)).
     np.amin(spectrogram) should be no smaller than np.amax(spectrogram)-60
     '''
-    raise RuntimeError("You need to change this part")
+import numpy as np
 
+def waveform_to_frames(waveform, frame_length, step):
+    N = len(waveform)
+    num_frames = (N - frame_length) // step + 1
+    frames = np.zeros((num_frames, frame_length))
+    for m in range(num_frames):
+        start = m * step
+        frames[m, :] = waveform[start:start + frame_length]
+    return frames
 
+def frames_to_mstft(frames):
+    N = frames.shape[1]
+    stft = np.fft.fft(frames, axis=1)
+    mstft = np.abs(stft[:, :N])
+    return mstft
+
+def mstft_to_spectrogram(mstft):
+    max_val = np.amax(mstft)
+    threshold = 0.001 * max_val
+    clipped = np.maximum(threshold, mstft)
+    spectrogram = 20 * np.log10(clipped)
+    return spectrogram
